@@ -754,10 +754,54 @@ main {
   filter: blur(8px);
 }
 
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.tech-carousel {
+  position: relative;
+  overflow: hidden;
+  margin-top: 48px;
+  --tech-duration: 36s;
+}
+
+.tech-carousel::before,
+.tech-carousel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 96px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tech-carousel::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(6, 6, 6, 1), rgba(6, 6, 6, 0));
+}
+
+.tech-carousel::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(6, 6, 6, 1), rgba(6, 6, 6, 0));
+}
+
+.tech-track {
+  display: flex;
   gap: 32px;
+  align-items: stretch;
+  width: max-content;
+  animation: tech-scroll var(--tech-duration, 36s) linear infinite;
+}
+
+.tech-carousel:hover .tech-track,
+.tech-carousel:focus-within .tech-track {
+  animation-play-state: paused;
+}
+
+@keyframes tech-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * var(--tech-loop-distance, 0px)));
+  }
 }
 
 .tech-card {
@@ -770,6 +814,8 @@ main {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   transition: transform var(--transition), border var(--transition), filter var(--transition);
+  flex: 0 0 320px;
+  min-width: 320px;
 }
 
 .tech-header {
@@ -812,6 +858,7 @@ main {
   margin: 0;
   line-height: 1.6;
   color: var(--text-subtle);
+  transition: opacity var(--transition);
 }
 
 .tech-points {
@@ -820,6 +867,7 @@ main {
   list-style: none;
   display: grid;
   gap: 14px;
+  transition: opacity var(--transition);
 }
 
 .tech-points li {
@@ -828,6 +876,7 @@ main {
   color: rgba(255, 255, 255, 0.62);
   font-size: 14px;
   line-height: 1.6;
+  transition: opacity var(--transition);
 }
 
 .tech-points li::before {
@@ -857,15 +906,102 @@ main {
   transition: opacity var(--transition), transform var(--transition);
 }
 
+.tech-meta {
+  margin: 28px 0 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
+  justify-content: start;
+  transition: opacity var(--transition);
+}
+
+.tech-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(12, 12, 12, 0.5);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.tech-meta span strong {
+  color: var(--text-strong);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.tech-card:hover p,
+.tech-card:hover .tech-points,
+.tech-card:hover .tech-points li,
+.tech-card:hover .tech-meta {
+  opacity: 0;
+}
+
 .tech-card:hover {
   transform: translateY(-8px);
   border: 1px solid rgba(255, 59, 48, 0.4);
   filter: drop-shadow(0 20px 42px rgba(255, 59, 48, 0.25));
+  z-index: 3;
 }
 
 .tech-card:hover .tooltip {
   opacity: 1;
   transform: translateY(0);
+}
+
+.tech-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.tech-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 1024px) {
+  .tech-carousel {
+    margin-top: 32px;
+  }
+
+  .tech-card {
+    flex: 0 0 280px;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 860px) {
+  .tech-track {
+    animation: none;
+  }
+
+  .tech-carousel {
+    overflow-x: auto;
+    padding-inline: 12px;
+  }
+
+  .tech-carousel::before,
+  .tech-carousel::after {
+    display: none;
+  }
+
+  .tech-track > .tech-card[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-track {
+    animation: none;
+  }
+
+  .tech-track > .tech-card[aria-hidden="true"] {
+    display: none;
+  }
 }
 
 .promo {

@@ -9,7 +9,7 @@ A premium dark-theme landing page for the Umbra AI Answer Engine, featuring anim
 - Radial gray-black backdrop with Umbra red accents and hero glow highlight
 - Animated hero headline and CTA with smooth scale-in entrance
 - Glassmorphism vision card and promotional banner with transparent red gradient
-- Technology grid with tooltips describing Riverpod, Dio (SSE), and Hive
+- Animated technology carousel highlighting Umbra's control plane, retrieval core, streaming gateway, trust layer, telemetry mesh, and operator console
 - Product advantage cards with elevated hover blur and red borders
 - “Try our AI Agent” section with chat preview and launchable sandbox modal
 - Testimonial carousel with navigation controls and 40% opacity profiles

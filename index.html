@@ -164,106 +164,157 @@
       <section class="technology section" id="technology" data-parallax>
         <div class="section-heading">
           <h2>Technology Stack</h2>
-          <p>Every layer tuned for real-time intelligence.</p>
+          <p>The Umbra agent is powered by a modular pipeline engineered for speed and trust.</p>
         </div>
-        <div class="tech-grid">
-          <article class="tech-card" data-animate="fade-up">
-            <div class="tech-header">
-              <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" role="presentation">
-                <rect x="8" y="8" width="48" height="48" rx="12" />
-              <div class="schedule-grid" data-animate="fade-up">
-                <div class="schedule-overview">
-                  <span class="eyebrow">INSTANT ACCESS</span>
-                  <h3>Launch guided intelligence in seconds</h3>
-                  <p>
-                    Umbra’s sandbox agent spins up a secure workspace so you can validate answer quality before
-                    your production rollout.
-                  </p>
-                  <ul class="schedule-points">
-                    <li>Drop in sample docs and receive cited responses instantly.</li>
-                    <li>Inspect reasoning, sources, and guardrails with expert prompts.</li>
-                    <li>Export the full transcript to align stakeholders post-session.</li>
-                  </ul>
-                  <div class="schedule-cta">
-                    <button class="btn primary" type="button" data-chatbot-open>Launch AI Agent</button>
-                    <button class="btn secondary" type="button" data-scroll="#contact">Talk to a human expert</button>
-                  </div>
-                  <div class="schedule-meta">
-                    <span><strong>Latency:</strong> sub-60ms answers</span>
-                    <span><strong>Context:</strong> 20-page document ingestion</span>
-                    <span><strong>Security:</strong> sealed sandbox environment</span>
-                  </div>
+        <div class="tech-carousel" data-animate="fade-up">
+          <div class="tech-track">
+            <article class="tech-card">
+              <div class="tech-header">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <rect x="10" y="10" width="44" height="44" rx="12" />
+                    <rect x="22" y="22" width="20" height="20" rx="6" />
+                    <path d="M18 32h28" />
+                  </svg>
                 </div>
-                <div class="chat-preview" aria-hidden="true">
-                  <div class="chat-preview-header">
-                    <span class="status-dot live"></span>
-                    <span>Umbra Agent Sandbox</span>
-                    <span class="session-id">Session #UA-204</span>
-                  </div>
-                  <div class="chat-preview-window">
-                    <div class="chat-message bot">
-                      <span class="sender">Umbra Agent</span>
-                      <p>
-                        Hi! Upload a policy or paste a brief and I'll return a sourced summary ready for
-                        stakeholders.
-                      </p>
-                      <div class="message-meta"><span>Citations • 4 sources</span></div>
-                    </div>
-                    <div class="chat-message user">
-                      <span class="sender">You</span>
-                      <p>We need a compliance update for the Q4 leadership deck.</p>
-                    </div>
-                    <div class="chat-message bot">
-                      <span class="sender">Umbra Agent</span>
-                      <p>
-                        Key points
-                        <span class="chips">Audit trail ready</span>
-                        <span class="chips">GDPR focus</span>
-                        <span class="chips">Action items</span>
-                      </p>
-                      <div class="message-meta"><span>Confidence 98%</span></div>
-                    </div>
-                  </div>
-                  <div class="chat-preview-input">
-                    <span>Type to try — agent is standing by</span>
-                  </div>
+                <span class="tech-tag">Orchestrator</span>
+              </div>
+              <h3>FastAPI Control Plane</h3>
+              <p>Coordinates prompts, guardrails, and routing across every Umbra session.</p>
+              <ul class="tech-points">
+                <li>Policy middleware enforces per-tenant governance.</li>
+                <li>Auto-scales pods with zero-downtime rollouts.</li>
+              </ul>
+              <div class="tech-meta">
+                <span>Latency <strong>&lt;55ms</strong></span>
+                <span>Autoscale <strong>x128</strong></span>
+              </div>
+              <span class="tooltip">Umbra's central brain dispatching every agent task.</span>
+            </article>
+
+            <article class="tech-card">
+              <div class="tech-header">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <circle cx="24" cy="24" r="12" />
+                    <circle cx="42" cy="40" r="10" />
+                    <path d="M22 38l20-20" />
+                  </svg>
                 </div>
+                <span class="tech-tag">Retrieval Core</span>
               </div>
-            </section>
-                <circle cx="40" cy="32" r="14" />
-                <path d="M32 18v28" />
-              </svg>
+              <h3>Vector Search + RAG</h3>
+              <p>Hybrid retrieval fusing dense embeddings with rule-based filters for precision.</p>
+              <ul class="tech-points">
+                <li>Chunks indexed in Pinecone with nightly defrag.</li>
+                <li>Adaptive context windows prevent hallucinations.</li>
+              </ul>
+              <div class="tech-meta">
+                <span>Recall <strong>97.4%</strong></span>
+                <span>Context <strong>48k tokens</strong></span>
               </div>
-              <span class="tech-tag">Streaming IO</span>
-            </div>
-            <h3>Dio (SSE)</h3>
-            <p>Streaming answers as they're computed in real-time.</p>
-            <ul class="tech-points">
-              <li>Adaptive retries sustain live consultations.</li>
-              <li>Progressive rendering keeps teams in sync.</li>
-            </ul>
-            <span class="tooltip">Maintains low-latency server-sent events.</span>
-          </article>
-          <article class="tech-card" data-animate="fade-up" data-delay="200">
-            <div class="tech-header">
-              <div class="icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" role="presentation">
-                <path d="M16 20h32v24H16z" />
-                <path d="M16 28h32" />
-                <path d="M24 36h8" />
-              </svg>
+              <span class="tooltip">Surfaces the right evidence for every answer.</span>
+            </article>
+
+            <article class="tech-card">
+              <div class="tech-header">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <rect x="12" y="24" width="40" height="16" rx="8" />
+                    <path d="M20 18h24" />
+                    <path d="M20 46h24" />
+                    <path d="M24 32h16" />
+                  </svg>
+                </div>
+                <span class="tech-tag">Realtime IO</span>
               </div>
-              <span class="tech-tag">Secure Vault</span>
-            </div>
-            <h3>Hive</h3>
-            <p>Securely stores session context for seamless recall.</p>
-            <ul class="tech-points">
-              <li>Encrypted at rest with key rotation policies.</li>
-              <li>Offline-first syncing for mobile advisors.</li>
-            </ul>
-            <span class="tooltip">Lightweight encrypted persistence layer.</span>
-          </article>
+              <h3>SSE Delivery Gateway</h3>
+              <p>Streams interim answers, citations, and agent actions as they are produced.</p>
+              <ul class="tech-points">
+                <li>Back-pressure buffering keeps clients synchronized.</li>
+                <li>Edge POPs fan out events across regions.</li>
+              </ul>
+              <div class="tech-meta">
+                <span>Uptime <strong>99.98%</strong></span>
+                <span>Fan-out <strong>25k streams</strong></span>
+              </div>
+              <span class="tooltip">Ensures teams see Umbra's reasoning live.</span>
+            </article>
+
+            <article class="tech-card">
+              <div class="tech-header">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <path d="M16 22h32l-6 24H22z" />
+                    <path d="M24 22l4-8h8l4 8" />
+                    <path d="M26 34h12" />
+                  </svg>
+                </div>
+                <span class="tech-tag">Trust Layer</span>
+              </div>
+              <h3>Umbra Shield Policies</h3>
+              <p>Applies compliance, redaction, and human-in-the-loop review when signals demand.</p>
+              <ul class="tech-points">
+                <li>Dynamic classifiers catch PII and regulated terms.</li>
+                <li>Escalation hooks notify subject-matter experts instantly.</li>
+              </ul>
+              <div class="tech-meta">
+                <span>Coverage <strong>11 locales</strong></span>
+                <span>Alerts <strong>&lt;2s SLA</strong></span>
+              </div>
+              <span class="tooltip">Keeps guidance compliant without slowing teams down.</span>
+            </article>
+
+            <article class="tech-card">
+              <div class="tech-header">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <path d="M18 20h28l6 24H12z" />
+                    <path d="M20 24l12-10 12 10" />
+                    <path d="M24 36h16" />
+                    <path d="M22 44h20" />
+                  </svg>
+                </div>
+                <span class="tech-tag">Observability</span>
+              </div>
+              <h3>Telemetry Mesh</h3>
+              <p>Live traces and metrics show how each agent decision unfolded.</p>
+              <ul class="tech-points">
+                <li>Structured events ship into Umbra Mission Control instantly.</li>
+                <li>Automated drift monitors surface anomalies before users do.</li>
+              </ul>
+              <div class="tech-meta">
+                <span>Signals <strong>3B/day</strong></span>
+                <span>Retention <strong>35 days</strong></span>
+              </div>
+              <span class="tooltip">Streams telemetry into a unified operational dashboard.</span>
+            </article>
+
+            <article class="tech-card">
+              <div class="tech-header">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <rect x="14" y="18" width="36" height="28" rx="6" />
+                    <path d="M18 26h28" />
+                    <path d="M22 34h16" />
+                    <path d="M28 18l4-8 4 8" />
+                  </svg>
+                </div>
+                <span class="tech-tag">Human Loop</span>
+              </div>
+              <h3>Operator Console</h3>
+              <p>Supervisors review, approve, or escalate responses in real-time.</p>
+              <ul class="tech-points">
+                <li>Role-based controls sync with your existing identity provider.</li>
+                <li>One-click handoffs preserve full chat history and citations.</li>
+              </ul>
+              <div class="tech-meta">
+                <span>Escalations <strong>&lt;90s</strong></span>
+                <span>Coverage <strong>24/7</strong></span>
+              </div>
+              <span class="tooltip">Keeps humans in the loop for high-sensitivity workflows.</span>
+            </article>
+          </div>
         </div>
       </section>
 

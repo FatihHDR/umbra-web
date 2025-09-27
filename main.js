@@ -244,4 +244,40 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 600);
     });
   }
+
+  const techCarousel = document.querySelector(".tech-carousel");
+  const techTrack = techCarousel?.querySelector(".tech-track");
+
+  if (techTrack) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const originalCards = Array.from(techTrack.children);
+
+    if (originalCards.length && !prefersReducedMotion) {
+      originalCards.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        techTrack.appendChild(clone);
+      });
+
+      const SPEED_PX_PER_SECOND = 120;
+
+      const updateLoopMetrics = () => {
+        const loopDistance = techTrack.scrollWidth / 2;
+        if (!loopDistance) return;
+        techTrack.style.setProperty("--tech-loop-distance", `${loopDistance}px`);
+        const duration = Math.max(loopDistance / SPEED_PX_PER_SECOND, 18);
+        techTrack.style.setProperty("--tech-duration", `${duration}s`);
+      };
+
+      const scheduleUpdate = () => requestAnimationFrame(updateLoopMetrics);
+      scheduleUpdate();
+      window.addEventListener("load", scheduleUpdate, { once: true });
+      window.addEventListener("resize", scheduleUpdate);
+
+      if ("ResizeObserver" in window) {
+        const resizeObserver = new ResizeObserver(scheduleUpdate);
+        resizeObserver.observe(techTrack);
+      }
+    }
+  }
 });
