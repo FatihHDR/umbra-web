@@ -200,7 +200,10 @@ document.addEventListener("DOMContentLoaded", () => {
     chatbotModal.classList.add("open");
     chatbotModal.setAttribute("aria-hidden", "false");
     document.body.classList.add("modal-open");
-    requestAnimationFrame(() => chatbotField?.focus());
+    requestAnimationFrame(() => {
+      chatbotField?.focus();
+      chatbotMessages?.scrollTo({ top: chatbotMessages.scrollHeight });
+    });
   };
 
   const closeChatbot = () => {
@@ -208,6 +211,9 @@ document.addEventListener("DOMContentLoaded", () => {
     chatbotModal.classList.remove("open");
     chatbotModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
+    if (chatbotField) {
+      chatbotField.value = "";
+    }
   };
 
   chatbotOpeners.forEach((button) => {
