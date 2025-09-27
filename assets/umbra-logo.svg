@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <radialGradient id="umbra-glow" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#ff3b30" stop-opacity="0.55" />
+      <stop offset="65%" stop-color="#ff3b30" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="umbra-shadow" cx="50%" cy="50%" r="84%">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#000" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="umbra-inner" x1="22%" y1="20%" x2="80%" y2="82%">
+      <stop offset="0%" stop-color="#202020" />
+      <stop offset="100%" stop-color="#121212" />
+    </linearGradient>
+    <linearGradient id="umbra-ring" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#ff5f55" />
+      <stop offset="50%" stop-color="#ff3b30" />
+      <stop offset="100%" stop-color="#ff5f55" />
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <circle cx="96" cy="96" r="88" fill="url(#umbra-shadow)" />
+    <circle cx="96" cy="96" r="88" fill="url(#umbra-glow)" />
+    <circle
+      cx="96"
+      cy="96"
+      r="86.4"
+      fill="none"
+      stroke="url(#umbra-ring)"
+      stroke-width="15.6"
+      stroke-linecap="round"
+      stroke-dasharray="336 206"
+      stroke-dashoffset="34"
+      opacity="0.92"
+    />
+    <circle cx="96" cy="96" r="52.8" fill="url(#umbra-inner)" />
+    <circle cx="96" cy="96" r="26.9" fill="#000" />
+  </g>
+</svg>
