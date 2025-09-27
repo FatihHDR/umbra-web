@@ -1774,6 +1774,10 @@ body.modal-open {
     grid-template-columns: 1fr;
   }
 
+  .chatbot-panel {
+    width: 88vw;
+  }
+
   .footer-inner {
     grid-template-columns: 1fr;
   }
@@ -1988,6 +1992,11 @@ body.modal-open {
 
   .schedule-cta {
     flex-direction: column;
+  }
+
+  .schedule-cta .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .chat-preview-header .session-id {
