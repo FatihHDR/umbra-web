@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const updateLoopMetrics = () => {
         const loopDistance = techTrack.scrollWidth / 2;
-        if (!loopDistance) return;
+        if (!loopDistance || loopDistance <= 0) return;
         techTrack.style.setProperty("--tech-loop-distance", `${loopDistance}px`);
         const duration = Math.max(loopDistance / SPEED_PX_PER_SECOND, 18);
         techTrack.style.setProperty("--tech-duration", `${duration}s`);
