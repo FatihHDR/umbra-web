@@ -770,25 +770,25 @@ main {
   isolation: isolate;
   -webkit-mask-image: linear-gradient(
     to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 8%,
-    rgba(0, 0, 0, 0.92) 24%,
-    #000 50%,
-    rgba(0, 0, 0, 0.92) 76%,
-    rgba(0, 0, 0, 0.4) 92%,
-    transparent 100%
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.28) 8%,
+    rgba(255, 255, 255, 0.72) 24%,
+    #fff 50%,
+    rgba(255, 255, 255, 0.72) 76%,
+    rgba(255, 255, 255, 0.28) 92%,
+    rgba(255, 255, 255, 0) 100%
   );
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
   mask-image: linear-gradient(
     to right,
-    transparent 0%,
-    rgba(0, 0, 0, 0.4) 8%,
-    rgba(0, 0, 0, 0.92) 24%,
-    #000 50%,
-    rgba(0, 0, 0, 0.92) 76%,
-    rgba(0, 0, 0, 0.4) 92%,
-    transparent 100%
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.28) 8%,
+    rgba(255, 255, 255, 0.72) 24%,
+    #fff 50%,
+    rgba(255, 255, 255, 0.72) 76%,
+    rgba(255, 255, 255, 0.28) 92%,
+    rgba(255, 255, 255, 0) 100%
   );
   mask-size: 100% 100%;
   mask-repeat: no-repeat;
