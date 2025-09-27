@@ -280,4 +280,40 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
+
+  const testimonialsCarousel = document.querySelector(".testimonials-carousel");
+  const testimonialsTrack = testimonialsCarousel?.querySelector(".testimonials-track");
+
+  if (testimonialsTrack) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const originalTestimonials = Array.from(testimonialsTrack.children);
+
+    if (originalTestimonials.length && !prefersReducedMotion) {
+      originalTestimonials.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        testimonialsTrack.appendChild(clone);
+      });
+
+      const SPEED_PX_PER_SECOND = 90;
+
+      const updateTestimonialsLoop = () => {
+        const loopDistance = testimonialsTrack.scrollWidth / 2;
+        if (!loopDistance || loopDistance <= 0) return;
+        testimonialsTrack.style.setProperty("--testimonials-loop-distance", `${loopDistance}px`);
+        const duration = Math.max(loopDistance / SPEED_PX_PER_SECOND, 20);
+        testimonialsTrack.style.setProperty("--testimonials-duration", `${duration}s`);
+      };
+
+      const scheduleTestimonialsUpdate = () => requestAnimationFrame(updateTestimonialsLoop);
+      scheduleTestimonialsUpdate();
+      window.addEventListener("load", scheduleTestimonialsUpdate, { once: true });
+      window.addEventListener("resize", scheduleTestimonialsUpdate);
+
+      if ("ResizeObserver" in window) {
+        const testimonialsResizeObserver = new ResizeObserver(scheduleTestimonialsUpdate);
+        testimonialsResizeObserver.observe(testimonialsTrack);
+      }
+    }
+  }
 });
