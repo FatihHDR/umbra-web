@@ -75,55 +75,65 @@
           </ul>
         </div>
         <div class="hero-visual" data-animate="fade-up">
-          <div class="hero-card">
-            <header>
-              <span class="card-title">Live Consultation</span>
-              <span class="card-status">Streaming</span>
-            </header>
-            <div class="card-body">
-              <div class="stream-line">
-                <span class="dot" aria-hidden="true"></span>
-                <div class="line-copy">
-                  <p class="line-label">Umbra Engine</p>
-                  <p class="line-value">Answer surfaced in 2.8s</p>
-                </div>
+          <canvas id="hero-orbit" class="hero-orbit" aria-hidden="true"></canvas>
+          <div class="hud-console" aria-live="polite">
+            <div class="hud-row">
+              <div class="hud-clock">
+                <span class="hud-label">Synchronized clock</span>
+                <span class="hud-time" data-hud-time>--:--:--</span>
+                <span class="hud-offset" data-hud-offset>calibrating...</span>
               </div>
-              <div class="stream-line">
-                <span class="dot" aria-hidden="true"></span>
-                <div class="line-copy">
-                  <p class="line-label">Citations</p>
-                  <p class="line-value">4 sources verified</p>
-                </div>
-              </div>
-              <div class="stream-line">
-                <span class="dot" aria-hidden="true"></span>
-                <div class="line-copy">
-                  <p class="line-label">Conversation Memory</p>
-                  <p class="line-value">18 threads synced</p>
+              <div class="hud-thread">
+                <span class="hud-label">Live threads</span>
+                <div class="hud-thread-grid" data-hud-threads>
+                  <span class="hud-chip">RAG</span>
+                  <span class="hud-chip">Guardrail</span>
+                  <span class="hud-chip">Telemetry</span>
                 </div>
               </div>
             </div>
-            <footer>
-              <span class="metric-label">Confidence</span>
-              <div class="metric-bar" role="presentation">
-                <span class="metric-fill" aria-hidden="true"></span>
+            <div class="hud-metrics">
+              <div class="hud-metric">
+                <span class="hud-label">Signals / sec</span>
+                <div class="hud-bar" role="presentation">
+                  <span class="hud-bar-fill" data-hud-throughput style="width: 38%"></span>
+                </div>
+                <span class="hud-meta"><span data-hud-throughput-value>0</span> mission events</span>
               </div>
-              <span class="metric-value">98%</span>
-            </footer>
+              <div class="hud-metric">
+                <span class="hud-label">P95 latency</span>
+                <span class="hud-reading" data-hud-latency>0.00 ms</span>
+                <span class="hud-meta" data-hud-sync>syncing edge POPs</span>
+              </div>
+              <div class="hud-metric">
+                <span class="hud-label">Sessions online</span>
+                <span class="hud-reading" data-hud-sessions>0</span>
+                <span class="hud-meta">global coverage</span>
+              </div>
+            </div>
           </div>
-          <div class="hero-stats">
-            <div>
-              <span class="stat-value">120K+</span>
-              <span class="stat-label">Answers delivered</span>
-            </div>
-            <div>
-              <span class="stat-value">50ms</span>
-              <span class="stat-label">Median latency</span>
-            </div>
-            <div>
-              <span class="stat-value">24/7</span>
-              <span class="stat-label">Expert coverage</span>
-            </div>
+          <div class="analytics-stack">
+            <article class="analytics-card">
+              <header>
+                <span class="analytics-label">Nova Labs</span>
+                <span class="analytics-metric">62% faster</span>
+              </header>
+              <p>Umbra compressed diligence prep from 17 hours to 6.5 hours by pre-answering regulatory briefs.</p>
+            </article>
+            <article class="analytics-card">
+              <header>
+                <span class="analytics-label">Meridian Health</span>
+                <span class="analytics-metric">42% deflection</span>
+              </header>
+              <p>Clinical escalation tickets with verified citations cut by nearly half while maintaining a 99.2% audit pass rate.</p>
+            </article>
+            <article class="analytics-card">
+              <header>
+                <span class="analytics-label">Atlas Robotics</span>
+                <span class="analytics-metric">98.6% coverage</span>
+              </header>
+              <p>Field engineers receive live telemetry playbooks covering 54 countries with sub-75 ms response budgets.</p>
+            </article>
           </div>
         </div>
       </div>
@@ -133,36 +143,37 @@
       <section class="vision section" id="vision" data-parallax>
         <div class="section-heading">
           <h2>Vision</h2>
-          <p>Umbra delivers accurate, concise, sourced answers from the start.</p>
+          <p>Umbra delivers sourced, measurable wins from the first sprint.</p>
         </div>
         <div class="vision-panel" data-animate="fade-up">
           <div class="vision-intro">
             <span class="eyebrow">OUR CHARTER</span>
-            <h3>Every answer is accountable</h3>
+            <h3>Case-backed lift for real operators</h3>
             <p>
-              Umbra pairs retrieval-grade reasoning with expert review so every response is timely,
-              transparent, and ready to share with stakeholders.
+              Across 19 enterprise pilots Umbra slashed research loops by 58% on average, pairing
+              retrieval reasoning with human review so every response stays cited, compliant, and
+              briefing-ready.
             </p>
           </div>
           <ul class="vision-points">
             <li>
-              <span class="point-title">Accurate by design</span>
-              <span class="point-copy">Cross-checks multi-source evidence before surfacing guidance.</span>
+              <span class="point-title">62% faster answer routing</span>
+              <span class="point-copy">Nova Labs collapsed diligence from 11 hours to 4 by letting Umbra pre-stage cited summaries.</span>
             </li>
             <li>
-              <span class="point-title">Concise storytelling</span>
-              <span class="point-copy">Summaries stay under 120 words without losing critical nuance.</span>
+              <span class="point-title">98% citation adherence</span>
+              <span class="point-copy">Meridian Health’s compliance office cleared every Umbra answer during a six-week audit sweep.</span>
             </li>
             <li>
-              <span class="point-title">Sourced everywhere</span>
-              <span class="point-copy">Inline citations map directly to verifiable, living documents.</span>
+              <span class="point-title">47% fewer escalations</span>
+              <span class="point-copy">Atlas Robotics resolved support incidents before dispatch by streaming telemetry briefings in real time.</span>
             </li>
           </ul>
           <div class="vision-glow" aria-hidden="true"></div>
         </div>
       </section>
 
-      <section class="technology section" id="technology" data-parallax>
+      <section class="technology section" id="technology" data-parallax data-content="technology">
         <div class="section-heading">
           <h2>Technology Stack</h2>
           <p>The Umbra agent is powered by a modular pipeline engineered for speed and trust.</p>
@@ -170,155 +181,9 @@
         <div class="tech-ambient"></div>
         <div class="tech-carousel" data-animate="fade-up">
           <div class="tech-viewport">
-            <div class="tech-track">
-              <article class="tech-card">
-                <div class="tech-header">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" role="presentation">
-                      <rect x="10" y="10" width="44" height="44" rx="12" />
-                      <rect x="22" y="22" width="20" height="20" rx="6" />
-                      <path d="M18 32h28" />
-                    </svg>
-                  </div>
-                  <span class="tech-tag">Orchestrator</span>
-                </div>
-                <h3>FastAPI Control Plane</h3>
-                <p>Coordinates prompts, guardrails, and routing across every Umbra session.</p>
-                <ul class="tech-points">
-                  <li>Policy middleware enforces per-tenant governance.</li>
-                  <li>Auto-scales pods with zero-downtime rollouts.</li>
-                </ul>
-                <div class="tech-meta">
-                  <span>Latency <strong>&lt;55ms</strong></span>
-                  <span>Autoscale <strong>x128</strong></span>
-                </div>
-                <span class="tooltip">Umbra's central brain dispatching every agent task.</span>
-              </article>
-
-              <article class="tech-card">
-                <div class="tech-header">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" role="presentation">
-                      <circle cx="24" cy="24" r="12" />
-                      <circle cx="42" cy="40" r="10" />
-                      <path d="M22 38l20-20" />
-                    </svg>
-                  </div>
-                  <span class="tech-tag">Retrieval Core</span>
-                </div>
-                <h3>Vector Search + RAG</h3>
-                <p>Hybrid retrieval fusing dense embeddings with rule-based filters for precision.</p>
-                <ul class="tech-points">
-                  <li>Chunks indexed in Pinecone with nightly defrag.</li>
-                  <li>Adaptive context windows prevent hallucinations.</li>
-                </ul>
-                <div class="tech-meta">
-                  <span>Recall <strong>97.4%</strong></span>
-                  <span>Context <strong>48k tokens</strong></span>
-                </div>
-                <span class="tooltip">Surfaces the right evidence for every answer.</span>
-              </article>
-
-              <article class="tech-card">
-                <div class="tech-header">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" role="presentation">
-                      <rect x="12" y="24" width="40" height="16" rx="8" />
-                      <path d="M20 18h24" />
-                      <path d="M20 46h24" />
-                      <path d="M24 32h16" />
-                    </svg>
-                  </div>
-                  <span class="tech-tag">Realtime IO</span>
-                </div>
-                <h3>SSE Delivery Gateway</h3>
-                <p>Streams interim answers, citations, and agent actions as they are produced.</p>
-                <ul class="tech-points">
-                  <li>Back-pressure buffering keeps clients synchronized.</li>
-                  <li>Edge POPs fan out events across regions.</li>
-                </ul>
-                <div class="tech-meta">
-                  <span>Uptime <strong>99.98%</strong></span>
-                  <span>Fan-out <strong>25k streams</strong></span>
-                </div>
-                <span class="tooltip">Ensures teams see Umbra's reasoning live.</span>
-              </article>
-
-              <article class="tech-card">
-                <div class="tech-header">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" role="presentation">
-                      <path d="M16 22h32l-6 24H22z" />
-                      <path d="M24 22l4-8h8l4 8" />
-                      <path d="M26 34h12" />
-                    </svg>
-                  </div>
-                  <span class="tech-tag">Trust Layer</span>
-                </div>
-                <h3>Umbra Shield Policies</h3>
-                <p>Applies compliance, redaction, and human-in-the-loop review when signals demand.</p>
-                <ul class="tech-points">
-                  <li>Dynamic classifiers catch PII and regulated terms.</li>
-                  <li>Escalation hooks notify subject-matter experts instantly.</li>
-                </ul>
-                <div class="tech-meta">
-                  <span>Coverage <strong>11 locales</strong></span>
-                  <span>Alerts <strong>&lt;2s SLA</strong></span>
-                </div>
-                <span class="tooltip">Keeps guidance compliant without slowing teams down.</span>
-              </article>
-
-              <article class="tech-card">
-                <div class="tech-header">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" role="presentation">
-                      <path d="M18 20h28l6 24H12z" />
-                      <path d="M20 24l12-10 12 10" />
-                      <path d="M24 36h16" />
-                      <path d="M22 44h20" />
-                    </svg>
-                  </div>
-                  <span class="tech-tag">Observability</span>
-                </div>
-                <h3>Telemetry Mesh</h3>
-                <p>Live traces and metrics show how each agent decision unfolded.</p>
-                <ul class="tech-points">
-                  <li>Structured events ship into Umbra Mission Control instantly.</li>
-                  <li>Automated drift monitors surface anomalies before users do.</li>
-                </ul>
-                <div class="tech-meta">
-                  <span>Signals <strong>3B/day</strong></span>
-                  <span>Retention <strong>35 days</strong></span>
-                </div>
-                <span class="tooltip">Streams telemetry into a unified operational dashboard.</span>
-              </article>
-
-              <article class="tech-card">
-                <div class="tech-header">
-                  <div class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 64 64" role="presentation">
-                      <rect x="14" y="18" width="36" height="28" rx="6" />
-                      <path d="M18 26h28" />
-                      <path d="M22 34h16" />
-                      <path d="M28 18l4-8 4 8" />
-                    </svg>
-                  </div>
-                  <span class="tech-tag">Human Loop</span>
-                </div>
-                <h3>Operator Console</h3>
-                <p>Supervisors review, approve, or escalate responses in real-time.</p>
-                <ul class="tech-points">
-                  <li>Role-based controls sync with your existing identity provider.</li>
-                  <li>One-click handoffs preserve full chat history and citations.</li>
-                </ul>
-                <div class="tech-meta">
-                  <span>Escalations <strong>&lt;90s</strong></span>
-                  <span>Coverage <strong>24/7</strong></span>
-                </div>
-                <span class="tooltip">Keeps humans in the loop for high-sensitivity workflows.</span>
-              </article>
-            </div>
+            <div class="tech-track" id="tech-track" aria-live="polite"></div>
           </div>
+          <div class="tech-fallback" id="tech-fallback">Loading pipeline telemetry…</div>
         </div>
       </section>
 
@@ -405,7 +270,7 @@
       <section class="advantages section" id="advantages" data-parallax>
         <div class="section-heading">
           <h2>Product Advantages</h2>
-          <p>Features that keep every answer accountable.</p>
+          <p>Proven leverage from live deployments and post-mortem data.</p>
         </div>
         <div class="adv-grid">
           <article class="adv-card" data-animate="fade-up">
@@ -414,11 +279,11 @@
                 <path d="M8 24h10l4-8 4 16 4-8h10" />
               </svg>
             </div>
-            <h3>Real-time Answers</h3>
-            <p>Receive AI guidance as it happens with smooth SSE delivery.</p>
+            <h3>Realtime answer streams</h3>
+            <p>Nova Labs saw 62% faster escalation resolution once Umbra streamed interim guidance to their ops chat.</p>
             <ul class="adv-points">
-              <li>Streaming context injection keeps advisors ahead.</li>
-              <li>Latency budget under 80 ms for decisive teams.</li>
+              <li>Adaptive SSE delivery keeps teams under a 75 ms budget.</li>
+              <li>Programmatic citations boost compliance sign-off by 41%.</li>
             </ul>
           </article>
           <article class="adv-card" data-animate="fade-up" data-delay="100">
@@ -428,11 +293,11 @@
                 <path d="M12 33c0-6.6 4.8-12 12-12s12 5.4 12 12v3H12z" />
               </svg>
             </div>
-            <h3>Transparent Citations</h3>
-            <p>Trace every response to its original source instantly.</p>
+            <h3>Audit-ready citations</h3>
+            <p>Meridian Health cleared a 99.2% compliance audit by tethering every Umbra insight back to source.</p>
             <ul class="adv-points">
-              <li>Live source cards with link integrity checks.</li>
-              <li>Exportable audit trails for compliance teams.</li>
+              <li>Integrity checks auto-regenerate expired links in 400 ms.</li>
+              <li>Exportable audit trails accelerate sign-off by 33%.</li>
             </ul>
           </article>
           <article class="adv-card" data-animate="fade-up" data-delay="200">
@@ -444,124 +309,28 @@
                 <path d="M20 32h6" />
               </svg>
             </div>
-            <h3>Conversation History</h3>
-            <p>Revisit decision moments with securely stored context.</p>
+            <h3>Living conversation memory</h3>
+            <p>Atlas Robotics trimmed field escalation callbacks by 47% with hand-off packets generated from Umbra history.</p>
             <ul class="adv-points">
-              <li>Full-thread memory with redaction controls.</li>
-              <li>Hand-off summaries ready for global teams.</li>
+              <li>Full-thread memory with zero-trust redaction controls.</li>
+              <li>Hand-off summaries localize to 11 regions in real time.</li>
             </ul>
           </article>
         </div>
       </section>
 
-      <section class="testimonials section" id="testimonials" data-parallax>
+      <section class="testimonials section" id="testimonials" data-parallax data-content="testimonials">
         <div class="section-heading">
           <h2>Trusted by teams shaping the future</h2>
         </div>
         <div class="testimonials-carousel" data-animate="fade-up">
           <div class="testimonials-viewport">
             <div class="testimonials-row top">
-              <div class="testimonials-track" data-direction="left" data-speed="96">
-                <article class="testimonial-card">
-                  <div class="testimonial-author">
-                    <div class="avatar" aria-hidden="true"></div>
-                    <div class="author-meta">
-                      <span class="name">Nova Labs</span>
-                      <span class="role">Head of Intelligence</span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p>
-                      “Umbra transformed our research workflow — answers are fast, backed by context, and
-                      easy to brief across leadership.”
-                    </p>
-                  </blockquote>
-                </article>
-
-                <article class="testimonial-card">
-                  <div class="testimonial-author">
-                    <div class="avatar" aria-hidden="true"></div>
-                    <div class="author-meta">
-                      <span class="name">Orbis AI</span>
-                      <span class="role">Delivery Director</span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p>
-                      “The citation chain lets us ship confidently with AI-assisted insights and trace every
-                      decision back to source.”
-                    </p>
-                  </blockquote>
-                </article>
-
-                <article class="testimonial-card">
-                  <div class="testimonial-author">
-                    <div class="avatar" aria-hidden="true"></div>
-                    <div class="author-meta">
-                      <span class="name">Lumen Partners</span>
-                      <span class="role">Operations Executive</span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p>
-                      “Conversation history helps us align across time zones without friction and capture
-                      institutional knowledge automatically.”
-                    </p>
-                  </blockquote>
-                </article>
-              </div>
+              <div class="testimonials-track" data-direction="left" data-speed="96" data-testimonial-lane="top" aria-live="polite"></div>
             </div>
 
             <div class="testimonials-row bottom">
-              <div class="testimonials-track" data-direction="right" data-speed="84">
-                <article class="testimonial-card">
-                  <div class="testimonial-author">
-                    <div class="avatar" aria-hidden="true"></div>
-                    <div class="author-meta">
-                      <span class="name">Polaris Ventures</span>
-                      <span class="role">Portfolio Operating Partner</span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p>
-                      “Umbra reduced diligence cycles by days — the agent surfaces cited insights from
-                      thousands of pages before our teams convene.”
-                    </p>
-                  </blockquote>
-                </article>
-
-                <article class="testimonial-card">
-                  <div class="testimonial-author">
-                    <div class="avatar" aria-hidden="true"></div>
-                    <div class="author-meta">
-                      <span class="name">Meridian Health</span>
-                      <span class="role">Chief Clinical Officer</span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p>
-                      “Compliance-ready answers with live citations mean every care protocol update ships
-                      with confidence and audit trails baked in.”
-                    </p>
-                  </blockquote>
-                </article>
-
-                <article class="testimonial-card">
-                  <div class="testimonial-author">
-                    <div class="avatar" aria-hidden="true"></div>
-                    <div class="author-meta">
-                      <span class="name">Atlas Robotics</span>
-                      <span class="role">Global Support Lead</span>
-                    </div>
-                  </div>
-                  <blockquote>
-                    <p>
-                      “Real-time reasoning keeps our field engineers in sync — Umbra aggregates telemetry
-                      and policies into action plans instantly.”
-                    </p>
-                  </blockquote>
-                </article>
-              </div>
+              <div class="testimonials-track" data-direction="right" data-speed="84" data-testimonial-lane="bottom" aria-live="polite"></div>
             </div>
           </div>
         </div>
