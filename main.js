@@ -282,27 +282,46 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const testimonialsCarousel = document.querySelector(".testimonials-carousel");
-  const testimonialsTrack = testimonialsCarousel?.querySelector(".testimonials-track");
+  const testimonialTracks = testimonialsCarousel
+    ? Array.from(testimonialsCarousel.querySelectorAll(".testimonials-track"))
+    : [];
 
-  if (testimonialsTrack) {
+  if (testimonialTracks.length) {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const originalTestimonials = Array.from(testimonialsTrack.children);
 
-    if (originalTestimonials.length && !prefersReducedMotion) {
+    testimonialTracks.forEach((track) => {
+      const originalTestimonials = Array.from(track.children);
+      if (!originalTestimonials.length) return;
+
+      if (prefersReducedMotion) {
+        track.style.animation = "none";
+        track.style.removeProperty("--testimonials-loop-distance");
+        track.style.removeProperty("--testimonials-duration");
+        track.style.transform = "translateX(0)";
+        return;
+      }
+
+      if (track.dataset.marqueeInitialized === "true") {
+        return;
+      }
+
       originalTestimonials.forEach((card) => {
         const clone = card.cloneNode(true);
         clone.setAttribute("aria-hidden", "true");
-        testimonialsTrack.appendChild(clone);
+        track.appendChild(clone);
       });
 
-      const SPEED_PX_PER_SECOND = 90;
+      track.dataset.marqueeInitialized = "true";
+
+      const speedOverride = Number(track.dataset.speed);
+      const SPEED_PX_PER_SECOND = Number.isFinite(speedOverride) && speedOverride > 0 ? speedOverride : 90;
 
       const updateTestimonialsLoop = () => {
-        const loopDistance = testimonialsTrack.scrollWidth / 2;
+        const loopDistance = track.scrollWidth / 2;
         if (!loopDistance || loopDistance <= 0) return;
-        testimonialsTrack.style.setProperty("--testimonials-loop-distance", `${loopDistance}px`);
-        const duration = Math.max(loopDistance / SPEED_PX_PER_SECOND, 20);
-        testimonialsTrack.style.setProperty("--testimonials-duration", `${duration}s`);
+        track.style.setProperty("--testimonials-loop-distance", `${loopDistance}px`);
+        const duration = Math.max(loopDistance / SPEED_PX_PER_SECOND, 18);
+        track.style.setProperty("--testimonials-duration", `${duration}s`);
       };
 
       const scheduleTestimonialsUpdate = () => requestAnimationFrame(updateTestimonialsLoop);
@@ -312,8 +331,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if ("ResizeObserver" in window) {
         const testimonialsResizeObserver = new ResizeObserver(scheduleTestimonialsUpdate);
-        testimonialsResizeObserver.observe(testimonialsTrack);
+        testimonialsResizeObserver.observe(track);
       }
-    }
+    });
   }
 });

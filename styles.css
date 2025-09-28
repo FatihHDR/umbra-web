@@ -198,6 +198,8 @@ body {
 
 .testimonials-viewport {
   position: relative;
+  display: grid;
+  gap: clamp(24px, 4vw, 48px);
   overflow: hidden;
   isolation: isolate;
   -webkit-mask-image: linear-gradient(
@@ -227,18 +229,39 @@ body {
   mask-mode: luminance;
 }
 
+.testimonials-row {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  align-items: stretch;
+}
+
+.testimonials-row.top {
+  padding-right: clamp(24px, 6vw, 80px);
+}
+
+.testimonials-row.bottom {
+  padding-left: clamp(24px, 6vw, 80px);
+}
+
 .testimonials-track {
   display: flex;
   align-items: stretch;
   gap: 32px;
   width: max-content;
   --testimonials-loop-distance: 0px;
-  animation: testimonials-scroll var(--testimonials-duration) linear infinite;
+  animation: testimonials-scroll var(--testimonials-duration, 38s) linear infinite;
+  will-change: transform;
 }
 
 .testimonials-carousel:hover .testimonials-track,
 .testimonials-carousel:focus-within .testimonials-track {
   animation-play-state: paused;
+}
+
+.testimonials-track[data-direction="right"] {
+  animation-direction: reverse;
+  animation-delay: calc(-1 * var(--testimonials-duration, 0s) / 2);
 }
 
 @keyframes testimonials-scroll {
@@ -1275,8 +1298,19 @@ body {
     padding-inline: 0;
   }
 
+  .testimonials-row {
+    overflow-x: auto;
+    padding: 0;
+  }
+
+  .testimonials-row.top,
+  .testimonials-row.bottom {
+    padding: 0;
+  }
+
   .testimonials-viewport {
     overflow-x: auto;
+    gap: 24px;
     -webkit-mask-image: none;
     mask-image: none;
   }
@@ -1304,6 +1338,10 @@ body {
   .testimonials-track {
     animation: none;
     padding-inline: 0;
+  }
+
+  .testimonials-row {
+    padding: 0;
   }
 
   .testimonials-track > .testimonial-card[aria-hidden="true"] {
