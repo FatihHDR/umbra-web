@@ -654,6 +654,7 @@ body {
 
 .hero-orbit {
   width: clamp(280px, 32vw, 520px);
+  height: clamp(280px, 32vw, 520px);
   aspect-ratio: 1;
   border-radius: 32px;
   background: radial-gradient(circle at 32% 30%, rgba(255, 59, 48, 0.18), transparent 68%),

@@ -246,8 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx.scale(dpr, dpr);
     };
 
+    const scheduleResize = () => requestAnimationFrame(resize);
+
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", scheduleResize);
+    if ("ResizeObserver" in window) {
+      const orbitObserver = new ResizeObserver(scheduleResize);
+      orbitObserver.observe(heroOrbit);
+    }
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
