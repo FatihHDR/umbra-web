@@ -62,108 +62,80 @@
               WATCH OVERVIEW
             </button>
           </div>
-          <ul class="hero-points">
-            <li>
-              <span class="point-title">Real-time SSE responses</span>
-              <span class="point-copy">Latency under 60 ms</span>
-            </li>
-            <li>
-              <span class="point-title">Transparent citation trail</span>
-              <span class="point-copy">Audit-ready answers</span>
-            </li>
-            <li>
-              <span class="point-title">Security-hardened data flow</span>
-              <span class="point-copy">Private by design</span>
-            </li>
-          </ul>
+          <div class="hero-points-carousel" data-animate="fade-up">
+            <ul class="hero-points">
+              <li>
+                <span class="point-title">Real-time SSE responses</span>
+                <span class="point-copy">Latency under 60 ms</span>
+              </li>
+              <li>
+                <span class="point-title">Transparent citation trail</span>
+                <span class="point-copy">Audit-ready answers</span>
+              </li>
+              <li>
+                <span class="point-title">Security-hardened data flow</span>
+                <span class="point-copy">Private by design</span>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="hero-visual" data-animate="fade-up">
-          <div class="orbit-hud">
-            <canvas
-              id="hero-orbit"
-              class="hero-orbit"
-              aria-hidden="true"
-            ></canvas>
-            <div class="hud-console" aria-live="polite">
-              <div class="hud-row">
-                <div class="hud-clock">
-                  <span class="hud-label">Synchronized clock</span>
-                  <span class="hud-time" data-hud-time>--:--:--</span>
-                  <span class="hud-offset" data-hud-offset
-                    >calibrating...</span
-                  >
-                </div>
-                <div class="hud-thread">
-                  <span class="hud-label">Live threads</span>
-                  <div class="hud-thread-grid" data-hud-threads>
-                    <span class="hud-chip">RAG</span>
-                    <span class="hud-chip">Guardrail</span>
-                    <span class="hud-chip">Telemetry</span>
+          <div class="hero-orbit-stage" aria-hidden="false">
+            <span class="hero-orbit-ring ring-primary" aria-hidden="true"></span>
+            <span class="hero-orbit-ring ring-secondary" aria-hidden="true"></span>
+            <div class="hero-hud-shell">
+              <div class="hud-console" aria-live="polite">
+                <div class="hud-row">
+                  <div class="hud-clock">
+                    <span class="hud-label">Synchronized clock</span>
+                    <span class="hud-time" data-hud-time>--:--:--</span>
+                    <span class="hud-offset" data-hud-offset>calibrating...</span>
+                  </div>
+                  <div class="hud-thread">
+                    <span class="hud-label">Live threads</span>
+                    <div class="hud-thread-grid" data-hud-threads>
+                      <span class="hud-chip">RAG</span>
+                      <span class="hud-chip">Guardrail</span>
+                      <span class="hud-chip">Telemetry</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="hud-metrics">
-                <div class="hud-metric">
-                  <span class="hud-label">Signals / sec</span>
-                  <div class="hud-bar" role="presentation">
-                    <span
-                      class="hud-bar-fill"
-                      data-hud-throughput
-                      style="width: 38%"
-                    ></span>
+                <div class="hud-metrics">
+                  <div class="hud-metric">
+                    <span class="hud-label">Signals / sec</span>
+                    <div class="hud-bar" role="presentation">
+                      <span class="hud-bar-fill" data-hud-throughput style="width: 38%"></span>
+                    </div>
+                    <span class="hud-meta"><span data-hud-throughput-value>0</span> mission events</span>
                   </div>
-                  <span class="hud-meta"
-                    ><span data-hud-throughput-value>0</span> mission
-                    events</span
-                  >
-                </div>
-                <div class="hud-metric">
-                  <span class="hud-label">P95 latency</span>
-                  <span class="hud-reading" data-hud-latency>0.00 ms</span>
-                  <span class="hud-meta" data-hud-sync
-                    >syncing edge POPs</span
-                  >
-                </div>
-                <div class="hud-metric">
-                  <span class="hud-label">Sessions online</span>
-                  <span class="hud-reading" data-hud-sessions>0</span>
-                  <span class="hud-meta">global coverage</span>
+                  <div class="hud-metric">
+                    <span class="hud-label">P95 latency</span>
+                    <span class="hud-reading" data-hud-latency>0.00 ms</span>
+                    <span class="hud-meta" data-hud-sync>syncing edge POPs</span>
+                  </div>
+                  <div class="hud-metric">
+                    <span class="hud-label">Sessions online</span>
+                    <span class="hud-reading" data-hud-sessions>0</span>
+                    <span class="hud-meta">global coverage</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="analytics-stack">
-            <article class="analytics-card">
-              <header>
-                <span class="analytics-label">Nova Labs</span>
-                <span class="analytics-metric">62% faster</span>
-              </header>
-              <p>
-                Umbra compressed diligence prep from 17 hours to 6.5 hours by
-                pre-answering regulatory briefs.
-              </p>
-            </article>
-            <article class="analytics-card">
-              <header>
-                <span class="analytics-label">Meridian Health</span>
-                <span class="analytics-metric">42% deflection</span>
-              </header>
-              <p>
-                Clinical escalation tickets with verified citations cut by
-                nearly half while maintaining a 99.2% audit pass rate.
-              </p>
-            </article>
-            <article class="analytics-card">
-              <header>
-                <span class="analytics-label">Atlas Robotics</span>
-                <span class="analytics-metric">98.6% coverage</span>
-              </header>
-              <p>
-                Field engineers receive live telemetry playbooks covering 54
-                countries with sub-75 ms response budgets.
-              </p>
-            </article>
-          </div>
+          <ul class="hero-insights" aria-label="Umbra impact highlights">
+            <li>
+              <span class="insight-metric">62% faster</span>
+              <span class="insight-label">Nova Labs diligence loops</span>
+            </li>
+            <li>
+              <span class="insight-metric">42% deflection</span>
+              <span class="insight-label">Meridian clinical escalations</span>
+            </li>
+            <li>
+              <span class="insight-metric">98.6% coverage</span>
+              <span class="insight-label">Atlas field telemetry briefs</span>
+            </li>
+          </ul>
         </div>
       </div>
     </header>
@@ -237,19 +209,66 @@
 
       <section class="promo section" id="promo" data-parallax>
         <div class="promo-content" data-animate="fade-up">
-          <span class="promo-badge">ENTERPRISE ONBOARDING</span>
-          <h2>Integrate Umbra into your company today</h2>
-          <p>
-            Launch a guided deployment with Umbra specialists—tailored policies,
-            rapid pilots, and measurable ROI in weeks, not quarters.
-          </p>
-          <div class="promo-actions">
-            <button class="btn primary" data-scroll="#contact">
-              START CONSULTATION
-            </button>
-            <button class="btn secondary" type="button" data-chatbot-open>
-              TRY OUR AI AGENT
-            </button>
+          <div class="promo-shell">
+            <div class="promo-copy">
+              <span class="promo-badge">MOBILE LAUNCH</span>
+              <h2>Umbra mission control, now on your phone</h2>
+              <p>
+                Take Umbra’s answer engine with you—sync live telemetry, review cited briefings, and
+                ship decisions from anywhere with the new Umbra mobile app.
+              </p>
+              <ul class="promo-highlights">
+                <li>
+                  <span class="highlight-title">Live telemetry dashboards</span>
+                  <span class="highlight-meta">Stream updates in under 60 ms across teams.</span>
+                </li>
+                <li>
+                  <span class="highlight-title">Offline briefcases</span>
+                  <span class="highlight-meta">Store cited packets securely for zero-signal zones.</span>
+                </li>
+                <li>
+                  <span class="highlight-title">One-tap escalations</span>
+                  <span class="highlight-meta">Escalate to Umbra operators with audit trails intact.</span>
+                </li>
+              </ul>
+              <div class="promo-actions">
+                <button class="btn primary" type="button" data-chatbot-open>
+                  GET IOS BETA ACCESS
+                </button>
+                <button class="btn secondary" type="button" data-scroll="#contact">
+                  JOIN ANDROID WAITLIST
+                </button>
+              </div>
+            </div>
+            <div class="promo-visual" aria-hidden="true">
+              <div class="promo-device">
+                <div class="device-header">
+                  <span class="device-signal">Umbra Mobile</span>
+                  <span class="device-status">Online</span>
+                </div>
+                <div class="device-body">
+                  <div class="device-metric">
+                    <span class="metric-label">Telemetry Feed</span>
+                    <span class="metric-value">56.2k/s</span>
+                    <span class="metric-sub">3 regions synced</span>
+                  </div>
+                  <div class="device-metric">
+                    <span class="metric-label">P95 Latency</span>
+                    <span class="metric-value">58 ms</span>
+                    <span class="metric-sub success">Within mission budget</span>
+                  </div>
+                  <div class="device-stream">
+                    <span class="stream-label">Latest briefing</span>
+                    <p>Q4 diligence packet summarized • 4 verified sources attached.</p>
+                  </div>
+                </div>
+                <div class="device-footer">
+                  <span class="device-chip">Shield mode</span>
+                  <span class="device-chip">Sync lock</span>
+                  <span class="device-chip">Mission share</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

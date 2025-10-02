@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const startConsultation = document.getElementById("start-consultation");
   const scrollTriggers = document.querySelectorAll("[data-scroll]");
   const siteHeader = document.querySelector(".site-header");
-  const heroOrbit = document.getElementById("hero-orbit");
   const hudElements = {
     time: document.querySelector("[data-hud-time]"),
     offset: document.querySelector("[data-hud-offset]"),
@@ -212,106 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Hero orbit + HUD
-  const setupOrbitVisualizer = () => {
-    if (!heroOrbit) return;
-    const ctx = heroOrbit.getContext("2d");
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    let width = heroOrbit.clientWidth || 360;
-    let height = heroOrbit.clientHeight || 360;
-
-    const orbits = Array.from({ length: 8 }, (_, index) => ({
-      radius: 70 + index * 26,
-      speed: 0.001 + index * 0.00032,
-      angle: Math.random() * Math.PI * 2,
-      alpha: 0.25 + index * 0.05,
-    }));
-
-    const nodes = Array.from({ length: 18 }, () => ({
-      radius: 60 + Math.random() * 180,
-      speed: 0.0015 + Math.random() * 0.0012,
-      angle: Math.random() * Math.PI * 2,
-      size: 3 + Math.random() * 4,
-      trail: [],
-    }));
-
-    const resize = () => {
-      width = heroOrbit.clientWidth || 360;
-      height = heroOrbit.clientHeight || 360;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      heroOrbit.width = width * dpr;
-      heroOrbit.height = height * dpr;
-      ctx.scale(dpr, dpr);
-    };
-
-    const scheduleResize = () => requestAnimationFrame(resize);
-
-    resize();
-    window.addEventListener("resize", scheduleResize);
-    if ("ResizeObserver" in window) {
-      const orbitObserver = new ResizeObserver(scheduleResize);
-      orbitObserver.observe(heroOrbit);
-    }
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-      const centerX = width / 2;
-      const centerY = height / 2;
-
-      const radial = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width, height));
-      radial.addColorStop(0, "rgba(255, 59, 48, 0.16)");
-      radial.addColorStop(1, "rgba(0, 0, 0, 0)");
-      ctx.fillStyle = radial;
-      ctx.fillRect(0, 0, width, height);
-
-      orbits.forEach((orbit, index) => {
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(orbit.angle);
-        ctx.globalAlpha = orbit.alpha;
-        ctx.lineWidth = index % 3 === 0 ? 1.6 : 0.8;
-        ctx.strokeStyle = index % 2 === 0 ? "rgba(255, 59, 48, 0.38)" : "rgba(255,255,255,0.12)";
-        ctx.beginPath();
-        ctx.ellipse(0, 0, orbit.radius, orbit.radius * 0.88, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-        orbit.angle += orbit.speed;
-      });
-
-      const drawNode = (node) => {
-        node.angle += node.speed;
-        const x = centerX + Math.cos(node.angle) * node.radius;
-        const y = centerY + Math.sin(node.angle) * node.radius * 0.88;
-
-        node.trail.unshift({ x, y });
-        node.trail = node.trail.slice(0, 18);
-
-        node.trail.forEach((point, idx) => {
-          const progress = 1 - idx / node.trail.length;
-          ctx.globalAlpha = 0.12 * progress;
-          ctx.fillStyle = idx === 0 ? "rgba(255, 59, 48, 0.82)" : "rgba(255, 59, 48, 0.35)";
-          ctx.beginPath();
-          ctx.arc(point.x, point.y, node.size * progress, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      };
-
-      nodes.forEach(drawNode);
-
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = "rgba(10, 10, 10, 0.92)";
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, 18, 0, Math.PI * 2);
-      ctx.fill();
-
-      requestAnimationFrame(draw);
-    };
-
-    requestAnimationFrame(draw);
-  };
-
   const setupHud = () => {
     if (!hudElements.time || !hudElements.offset) return;
     const statuses = ["mission lock", "edge POP sync", "telemetry aligned", "ops live"];
@@ -377,7 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(updateHud, 1400);
   };
 
-  setupOrbitVisualizer();
   setupHud();
 
   // Deferred content loader
@@ -459,6 +357,46 @@ document.addEventListener("DOMContentLoaded", () => {
     if ("ResizeObserver" in window) {
       const resizeObserver = new ResizeObserver(scheduleUpdate);
       resizeObserver.observe(techTrack);
+    }
+  };
+
+  const initHeroPointsCarousel = () => {
+    const track = document.querySelector(".hero-points");
+    if (!track || track.dataset.marqueeInitialized === "true") return;
+    const items = Array.from(track.children);
+    if (items.length < 2) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      track.style.animation = "none";
+      track.style.removeProperty("--hero-points-loop");
+      track.style.removeProperty("--hero-points-duration");
+      return;
+    }
+
+    items.forEach((item) => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    });
+
+    track.dataset.marqueeInitialized = "true";
+    const SPEED_PX_PER_SECOND = 72;
+    const updateLoop = () => {
+      const loopDistance = track.scrollWidth / 2;
+      if (!loopDistance) return;
+      track.style.setProperty("--hero-points-loop", `${loopDistance}px`);
+      const duration = Math.max(loopDistance / SPEED_PX_PER_SECOND, 18);
+      track.style.setProperty("--hero-points-duration", `${duration}s`);
+    };
+
+    const scheduleUpdate = () => requestAnimationFrame(updateLoop);
+    scheduleUpdate();
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("load", scheduleUpdate, { once: true });
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(scheduleUpdate);
+      observer.observe(track);
     }
   };
 
@@ -640,6 +578,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initTestimonialsMarquee();
   };
+
+  initHeroPointsCarousel();
 
   if (contentSections.length) {
     const contentObserver = new IntersectionObserver(

@@ -1,0 +1,17 @@
+# Node.js dependencies
+node_modules/
+
+# Package manager lockfiles
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build outputs
+/dist/
+/build/
+
+# Logs and runtime data
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
