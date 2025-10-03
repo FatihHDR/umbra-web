@@ -12,6 +12,7 @@
   --text-subtle: rgba(255, 255, 255, 0.7);
   --text-muted: rgba(255, 255, 255, 0.5);
   --grid-line: rgba(255, 255, 255, 0.06);
+
   --chip-bg: rgba(255, 59, 48, 0.16);
   --chip-border: rgba(255, 59, 48, 0.35);
   --hud-border: rgba(255, 255, 255, 0.08);
@@ -45,7 +46,7 @@ body {
   color: var(--text-strong);
   display: flex;
   flex-direction: column;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-snap-stop: normal;
   scroll-padding-top: var(--header-height);
   overflow-x: hidden;
@@ -98,76 +99,6 @@ body {
 .brand:hover,
 .brand:focus-visible {
   color: rgba(255, 255, 255, 0.9);
-}
-
-.site-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: 28px;
-  margin: 0;
-  padding: 0;
-}
-
-.site-nav a {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 0;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.62);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color var(--transition);
-}
-
-.site-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  width: 100%;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--primary);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--transition);
-  opacity: 0.8;
-}
-
-.site-nav a:hover,
-.site-nav a:focus-visible {
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.site-nav a:hover::after,
-.site-nav a:focus-visible::after,
-.site-nav a.is-active::after {
-  transform: scaleX(1);
-}
-
-.site-nav a:focus-visible {
-  outline: none;
-}
-
-.site-actions {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-}
-
-.testimonials-carousel {
-  position: relative;
-  margin-top: 48px;
-  --testimonials-duration: 38s;
-  --testimonials-edge-width: clamp(150px, 22vw, 300px);
 }
 
 .testimonials-carousel::before,
@@ -2022,26 +1953,6 @@ body {
   line-height: 1.6;
 }
 
-.schedule-points li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 10px;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  background: var(--primary);
-  box-shadow: 0 0 12px rgba(255, 59, 48, 0.5);
-}
-
-.schedule-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px 24px;
-  font-size: 14px;
-  color: var(--text-muted);
-}
-
 .schedule-cta {
   display: flex;
   flex-wrap: wrap;
@@ -2842,21 +2753,40 @@ body.modal-open {
 }
 
 @media (max-width: 768px) {
+  body {
+    scroll-snap-type: none;
+  }
+
+  .section {
+    min-height: auto;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+    justify-content: flex-start;
+  }
+
   .section {
     padding: 72px 48px;
   }
 
   .site-header-inner {
     padding: 18px 28px;
+    display: flex;
     flex-wrap: wrap;
-    row-gap: 16px;
+    align-items: center;
+    gap: 16px 24px;
   }
 
   .site-nav {
     order: 3;
-    width: 100%;
+    flex: 1 1 100%;
     justify-content: space-between;
     gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .site-nav a {
@@ -2865,6 +2795,7 @@ body.modal-open {
 
   .site-actions {
     order: 2;
+    margin-left: auto;
   }
 
   .hero {
@@ -3020,6 +2951,10 @@ body.modal-open {
 
   .hero {
     padding: 120px 24px 96px;
+    min-height: auto;
+    align-items: flex-start;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
 
   .logo-stack {
@@ -3089,12 +3024,30 @@ body.modal-open {
     height: 14px;
   }
 
+  .hero-points-carousel {
+    margin-top: 24px;
+    overflow: visible;
+  }
+
+  .hero-points-carousel::before,
+  .hero-points-carousel::after {
+    display: none;
+  }
+
   .hero-points {
+    display: grid;
+    width: 100%;
     gap: 14px;
+    animation: none;
+  }
+
+  .hero-points > li[aria-hidden="true"] {
+    display: none !important;
   }
 
   .hero-points li {
-    flex: 0 0 78%;
+    width: 100%;
+    flex: 1 1 auto;
   }
 
   .hero-orbit-stage {
