@@ -71,6 +71,56 @@ body {
   gap: 32px;
 }
 
+.site-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 32px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.site-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 1;
+  transition: color var(--transition), background var(--transition), box-shadow var(--transition);
+}
+
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 59, 48, 0.14);
+  box-shadow: 0 8px 22px rgba(255, 59, 48, 0.22);
+}
+
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after {
+  opacity: 1;
+}
+
+.site-nav a:focus-visible {
+  outline: none;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
