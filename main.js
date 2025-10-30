@@ -168,9 +168,40 @@ document.addEventListener("DOMContentLoaded", () => {
     chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: "smooth" });
   };
 
-  const generateAgentResponse = (prompt) => {
-    const trimmed = prompt.slice(0, 160);
-    return `Here’s how Umbra would assist with “${trimmed}”: summarise findings, cite live sources, and package next actions for your team.`;
+  // Call backend Deepseek proxy
+  const getApiBase = () => {
+    try {
+      if (window && window.__ENV && window.__ENV.DEEPSEEK_BASE_URL) return window.__ENV.DEEPSEEK_BASE_URL.replace(/\/$/, '');
+    } catch (e) {
+      // ignore
+    }
+    return '';
+  };
+
+  const callDeepseek = async (query) => {
+    const base = getApiBase();
+    if (!base) throw new Error('API base URL not configured');
+
+    const url = `${base}/api/deepseek/query`;
+    const payload = { query, topK: 5 };
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // include ngrok skip warning header as requested
+        'ngrok-skip-browser-warning': (window.__ENV && window.__ENV.NGROK_SKIP_BROWSER_WARNING) || '1',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`Deepseek API error: ${resp.status} ${text}`);
+    }
+
+    const data = await resp.json();
+    return data;
   };
 
   const openChatbot = () => {
@@ -201,13 +232,116 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   if (chatbotForm && chatbotField) {
-    chatbotForm.addEventListener("submit", (event) => {
+    chatbotForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       const prompt = chatbotField.value.trim();
       if (!prompt) return;
-      appendChatbotMessage("user", prompt);
-      chatbotField.value = "";
-      setTimeout(() => appendChatbotMessage("bot", generateAgentResponse(prompt)), 620);
+      appendChatbotMessage('user', prompt);
+      chatbotField.value = '';
+
+      // Show temporary typing message
+      appendChatbotMessage('bot', 'Thinking...');
+
+      try {
+        const res = await callDeepseek(prompt);
+        // remove last bot 'Thinking...' message
+        if (chatbotMessages) {
+          const msgs = chatbotMessages.querySelectorAll('.chatbot-message.bot');
+          const last = msgs[msgs.length - 1];
+          if (last && last.textContent && last.textContent.includes('Thinking')) last.remove();
+        }
+
+        if (!res || res.status !== 'ok' || !res.result) {
+          appendChatbotMessage('bot', res && res.error && res.error.message ? `Error: ${res.error.message}` : 'Sorry, I could not get an answer right now.');
+          return;
+        }
+
+        const { summary, answerHtml, citations, highlights, actions } = res.result;
+
+        if (summary) appendChatbotMessage('bot', summary);
+        else if (answerHtml) {
+          // render safe HTML fragment
+          const message = document.createElement('div');
+          message.className = 'chatbot-message bot';
+          const sender = document.createElement('span');
+          sender.className = 'sender';
+          sender.textContent = 'Umbra Agent';
+          const copy = document.createElement('div');
+          copy.innerHTML = answerHtml; // assume backend sanitized
+          message.append(sender, copy);
+          chatbotMessages.append(message);
+        }
+
+        // render highlights
+        if (highlights && highlights.length) {
+          const block = document.createElement('div');
+          block.className = 'chatbot-highlights';
+          const ul = document.createElement('ul');
+          highlights.forEach((h) => {
+            const li = document.createElement('li');
+            li.textContent = h;
+            ul.appendChild(li);
+          });
+          block.appendChild(ul);
+          chatbotMessages.appendChild(block);
+        }
+
+        // render citations
+        if (citations && citations.length) {
+          const cBlock = document.createElement('div');
+          cBlock.className = 'chatbot-citations';
+          const title = document.createElement('div');
+          title.className = 'citations-title';
+          title.textContent = `${res.result.sourcesCount || citations.length} sources`;
+          cBlock.appendChild(title);
+          const list = document.createElement('ul');
+          citations.forEach((c) => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = c.title || c.url || c.id;
+            if (c.url) a.href = c.url;
+            a.target = '_blank';
+            li.appendChild(a);
+            if (c.fragment) {
+              const frag = document.createElement('p');
+              frag.textContent = c.fragment;
+              li.appendChild(frag);
+            }
+            list.appendChild(li);
+          });
+          cBlock.appendChild(list);
+          chatbotMessages.appendChild(cBlock);
+        }
+
+        // render actions as buttons
+        if (actions && actions.length) {
+          const actionBar = document.createElement('div');
+          actionBar.className = 'chatbot-actions';
+          actions.forEach((act) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn secondary';
+            btn.textContent = act.label || 'Action';
+            btn.addEventListener('click', () => {
+              if (act.type === 'open_url' && act.payload && act.payload.url) {
+                window.open(act.payload.url, act.payload.openInNewTab ? '_blank' : '_self');
+              } else if (act.type === 'request_long_summary') {
+                // request a longer summary
+                chatbotForm.dispatchEvent(new CustomEvent('requestLongSummary', { detail: { minWords: act.payload && act.payload.minWords } }));
+              }
+            });
+            actionBar.appendChild(btn);
+          });
+          chatbotMessages.appendChild(actionBar);
+        }
+      } catch (err) {
+        // remove thinking
+        if (chatbotMessages) {
+          const msgs = chatbotMessages.querySelectorAll('.chatbot-message.bot');
+          const last = msgs[msgs.length - 1];
+          if (last && last.textContent && last.textContent.includes('Thinking')) last.remove();
+        }
+        appendChatbotMessage('bot', `Error: ${err.message}`);
+      }
     });
   }
 
