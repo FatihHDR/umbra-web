@@ -2,10 +2,13 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.1.14",
     "tailwindcss": "^4.1.14",
-    "dotenv": "^16.0.0"
-  }
-  ,
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7",
+    "cors": "^2.8.5"
+  },
   "scripts": {
-    "generate-env": "node scripts/generate-env.js"
+    "generate-env": "node scripts/generate-env.js",
+    "start-proxy": "node scripts/dev-proxy.js"
   }
 }
