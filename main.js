@@ -1,3 +1,5 @@
+// Add at the top
+import { marked } from 'marked';
 document.addEventListener("DOMContentLoaded", () => {
   const animatedElements = document.querySelectorAll("[data-animate]");
   const parallaxSections = document.querySelectorAll("[data-parallax]");
@@ -263,21 +265,10 @@ document.addEventListener("DOMContentLoaded", () => {
           if (last && last.textContent && last.textContent.includes('Thinking')) last.remove();
         }
 
-        // Deepseek: show answer from choices[0].message.content if present, render as Markdown/HTML
+        // Deepseek: show answer from choices[0].message.content if present, render as Markdown/HTML using 'marked'
         if (res && Array.isArray(res.choices) && res.choices[0] && res.choices[0].message && res.choices[0].message.content) {
           const raw = res.choices[0].message.content;
-          // Basic Markdown to HTML conversion for bold, lists, and headings
-          let html = raw
-            .replace(/^### (.*)$/gm, '<strong>$1</strong>')
-            .replace(/^---$/gm, '<hr>')
-            .replace(/^\*\*(.*?)\*\*/gm, '<b>$1</b>')
-            .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
-            .replace(/^\* (.*)$/gm, '<li>$1</li>')
-            .replace(/^\d+\. (.*)$/gm, '<li>$1</li>')
-            .replace(/\n{2,}/g, '<br>');
-          // Wrap consecutive <li> in <ul>
-          html = html.replace(/(<li>.*?<\/li>)+/gs, (m) => `<ul>${m}</ul>`);
-          // Render as HTML in chatbot
+          const html = marked.parse(raw);
           const message = document.createElement('div');
           message.className = 'chatbot-message bot';
           const sender = document.createElement('span');
