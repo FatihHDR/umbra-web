@@ -196,6 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
         'Content-Type': 'application/json',
         // include ngrok skip warning header as requested
         'ngrok-skip-browser-warning': (window.__ENV && window.__ENV.NGROK_SKIP_BROWSER_WARNING) || '1',
+        // optionally include API key directly (dev only) if present in env-config
+        ...(window.__ENV && window.__ENV.DEEPSEEK_API_KEY ? { 'Authorization': `Bearer ${window.__ENV.DEEPSEEK_API_KEY}` } : {}),
       },
       body: JSON.stringify(payload),
     });
