@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const base = getApiBase();
     if (!base) throw new Error('API base URL not configured');
 
-    const url = `${base}/api/deepseek/query`;
+  const url = `${base}/api/v1/deepseek/query`;
     const payload = { query, topK: 5 };
 
     const resp = await fetch(url, {
