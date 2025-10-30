@@ -1,5 +1,3 @@
-// Add at the top
-import { marked } from 'marked';
 document.addEventListener("DOMContentLoaded", () => {
   const animatedElements = document.querySelectorAll("[data-animate]");
   const parallaxSections = document.querySelectorAll("[data-parallax]");
@@ -180,19 +178,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return '';
   };
 
-  const callDeepseek = async (query) => {
+  // Streaming Deepseek call
+  const callDeepseek = async (query, onStream) => {
     const base = getApiBase();
     if (!base) throw new Error('API base URL not configured');
     const url = `${base}/api/v1/deepseek/query`;
-    // Deepseek /v1/chat/completions expects a payload with 'messages' and 'model'
     const payload = {
       model: 'deepseek-chat',
       messages: [
         { role: 'user', content: query }
-      ]
+      ],
+      stream: true
     };
     try {
-      console.debug('[Deepseek] POST', url, payload);
+      console.debug('[Deepseek] POST (stream)', url, payload);
     } catch (e) {}
 
     const resp = await fetch(url, {
@@ -213,8 +212,34 @@ document.addEventListener("DOMContentLoaded", () => {
       throw new Error(message);
     }
 
-    const data = await resp.json();
-    return data;
+    // Stream response
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let done = false;
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      if (value) {
+        buffer += decoder.decode(value, { stream: true });
+        let eolIndex;
+        while ((eolIndex = buffer.indexOf('\n')) >= 0) {
+          let line = buffer.slice(0, eolIndex).trim();
+          buffer = buffer.slice(eolIndex + 1);
+          if (!line) continue;
+          if (line.startsWith('data: ')) {
+            const jsonStr = line.replace('data: ', '').trim();
+            if (!jsonStr || jsonStr === '[DONE]') continue;
+            try {
+              const delta = JSON.parse(jsonStr);
+              if (onStream) onStream(delta);
+            } catch (e) {
+              // ignore parse error for incomplete lines
+            }
+          }
+        }
+      }
+    }
   };
 
   const openChatbot = () => {
@@ -253,44 +278,29 @@ document.addEventListener("DOMContentLoaded", () => {
       chatbotField.value = '';
 
       // Show temporary typing message
-      appendChatbotMessage('bot', 'Thinking...');
+      const message = document.createElement('div');
+      message.className = 'chatbot-message bot';
+      const sender = document.createElement('span');
+      sender.className = 'sender';
+      sender.textContent = 'Umbra Agent';
+      const copy = document.createElement('div');
+      copy.innerHTML = '<i>Thinking...</i>';
+      message.append(sender, copy);
+      chatbotMessages.append(message);
+      chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: "smooth" });
 
+      let streamed = '';
       try {
-  const res = await callDeepseek(prompt);
-  console.debug('[Deepseek] Full API response', res);
-        // remove last bot 'Thinking...' message
-        if (chatbotMessages) {
-          const msgs = chatbotMessages.querySelectorAll('.chatbot-message.bot');
-          const last = msgs[msgs.length - 1];
-          if (last && last.textContent && last.textContent.includes('Thinking')) last.remove();
-        }
-
-        // Deepseek: show answer from choices[0].message.content if present, render as Markdown/HTML using 'marked'
-        if (res && Array.isArray(res.choices) && res.choices[0] && res.choices[0].message && res.choices[0].message.content) {
-          const raw = res.choices[0].message.content;
-          const html = marked.parse(raw);
-          const message = document.createElement('div');
-          message.className = 'chatbot-message bot';
-          const sender = document.createElement('span');
-          sender.className = 'sender';
-          sender.textContent = 'Umbra Agent';
-          const copy = document.createElement('div');
-          copy.innerHTML = html;
-          message.append(sender, copy);
-          chatbotMessages.append(message);
-          chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: "smooth" });
-          return;
-        }
-        // fallback: show error or generic message
-        appendChatbotMessage('bot', res && res.error && res.error.message ? `Error: ${res.error.message}` : 'Sorry, I could not get an answer right now.');
+        await callDeepseek(prompt, (delta) => {
+          // Deepseek stream: delta.choices[0].delta.content (OpenAI style)
+          if (delta && delta.choices && delta.choices[0] && delta.choices[0].delta && delta.choices[0].delta.content) {
+            streamed += delta.choices[0].delta.content;
+            copy.innerHTML = window.marked.parse(streamed);
+            chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: "smooth" });
+          }
+        });
       } catch (err) {
-        // remove thinking
-        if (chatbotMessages) {
-          const msgs = chatbotMessages.querySelectorAll('.chatbot-message.bot');
-          const last = msgs[msgs.length - 1];
-          if (last && last.textContent && last.textContent.includes('Thinking')) last.remove();
-        }
-        appendChatbotMessage('bot', `Error: ${err.message}`);
+        copy.innerHTML = `<span style="color:red">Error: ${err.message}</span>`;
       }
     });
   }
