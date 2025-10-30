@@ -27,23 +27,40 @@ app.get('/', (req, res) => res.send('Umbra dev proxy running'));
 // Proxy endpoint matching frontend path
 app.post('/api/v1/deepseek/query', async (req, res) => {
   try {
-    // Always forward to /v1/chat/completions regardless of .env for compatibility
     const upstreamUrl = 'https://api.deepseek.com/v1/chat/completions';
-    const resp = await fetch(upstreamUrl, {
+    // Ensure stream:true is set
+    const upstreamBody = { ...req.body, stream: true };
+    const upstreamResp = await fetch(upstreamUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${API_KEY}`,
       },
-      body: JSON.stringify(req.body),
+      body: JSON.stringify(upstreamBody),
     });
 
-    const contentType = resp.headers.get('content-type') || '';
-    const body = await (contentType.includes('application/json') ? resp.json() : resp.text());
+    res.status(upstreamResp.status);
+    // Forward headers for streaming
+    res.setHeader('Content-Type', upstreamResp.headers.get('content-type') || 'text/event-stream');
+    res.setHeader('Transfer-Encoding', 'chunked');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
 
-    res.status(resp.status);
-    if (contentType) res.set('Content-Type', contentType);
-    return res.send(body);
+    if (!upstreamResp.body) {
+      res.end();
+      return;
+    }
+
+    upstreamResp.body.on('data', (chunk) => {
+      res.write(chunk);
+    });
+    upstreamResp.body.on('end', () => {
+      res.end();
+    });
+    upstreamResp.body.on('error', (err) => {
+      res.write(`event: error\ndata: ${JSON.stringify({ error: err.message })}\n\n`);
+      res.end();
+    });
   } catch (err) {
     console.error('Proxy error', err);
     return res.status(502).json({ error: 'Proxy failed to reach upstream', detail: err.message });
