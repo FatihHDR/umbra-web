@@ -27,7 +27,8 @@ app.get('/', (req, res) => res.send('Umbra dev proxy running'));
 // Proxy endpoint matching frontend path
 app.post('/api/v1/deepseek/query', async (req, res) => {
   try {
-    const upstreamUrl = TARGET;
+    // Always forward to /v1/chat/completions regardless of .env for compatibility
+    const upstreamUrl = 'https://api.deepseek.com/v1/chat/completions';
     const resp = await fetch(upstreamUrl, {
       method: 'POST',
       headers: {

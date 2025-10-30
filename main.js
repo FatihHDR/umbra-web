@@ -182,21 +182,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const base = getApiBase();
     if (!base) throw new Error('API base URL not configured');
     const url = `${base}/api/v1/deepseek/query`;
-    const payload = { query, topK: 5 };
-    // debug: log the outgoing request so we can trace which path is being used
+    // Deepseek /v1/chat/completions expects a payload with 'messages' and 'model'
+    const payload = {
+      model: 'deepseek-chat',
+      messages: [
+        { role: 'user', content: query }
+      ]
+    };
     try {
       console.debug('[Deepseek] POST', url, payload);
-    } catch (e) {
-      // ignore console failures in older browsers
-    }
+    } catch (e) {}
 
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // include ngrok skip warning header as requested
         'ngrok-skip-browser-warning': (window.__ENV && window.__ENV.NGROK_SKIP_BROWSER_WARNING) || '1',
-        // optionally include API key directly (dev only) if present in env-config
         ...(window.__ENV && window.__ENV.DEEPSEEK_API_KEY ? { 'Authorization': `Bearer ${window.__ENV.DEEPSEEK_API_KEY}` } : {}),
       },
       body: JSON.stringify(payload),
@@ -204,7 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!resp.ok) {
       const text = await resp.text();
-      // include response.url in thrown error to help trace proxies/tunnels
       const respUrl = resp.url || url;
       const message = `Deepseek API error: ${resp.status} ${respUrl} ${text}`;
       console.error('[Deepseek] API error', { status: resp.status, url: respUrl, body: text });
@@ -254,7 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
       appendChatbotMessage('bot', 'Thinking...');
 
       try {
-        const res = await callDeepseek(prompt);
+  const res = await callDeepseek(prompt);
+  console.debug('[Deepseek] Full API response', res);
         // remove last bot 'Thinking...' message
         if (chatbotMessages) {
           const msgs = chatbotMessages.querySelectorAll('.chatbot-message.bot');
@@ -262,88 +263,35 @@ document.addEventListener("DOMContentLoaded", () => {
           if (last && last.textContent && last.textContent.includes('Thinking')) last.remove();
         }
 
-        if (!res || res.status !== 'ok' || !res.result) {
-          appendChatbotMessage('bot', res && res.error && res.error.message ? `Error: ${res.error.message}` : 'Sorry, I could not get an answer right now.');
-          return;
-        }
-
-        const { summary, answerHtml, citations, highlights, actions } = res.result;
-
-        if (summary) appendChatbotMessage('bot', summary);
-        else if (answerHtml) {
-          // render safe HTML fragment
+        // Deepseek: show answer from choices[0].message.content if present, render as Markdown/HTML
+        if (res && Array.isArray(res.choices) && res.choices[0] && res.choices[0].message && res.choices[0].message.content) {
+          const raw = res.choices[0].message.content;
+          // Basic Markdown to HTML conversion for bold, lists, and headings
+          let html = raw
+            .replace(/^### (.*)$/gm, '<strong>$1</strong>')
+            .replace(/^---$/gm, '<hr>')
+            .replace(/^\*\*(.*?)\*\*/gm, '<b>$1</b>')
+            .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+            .replace(/^\* (.*)$/gm, '<li>$1</li>')
+            .replace(/^\d+\. (.*)$/gm, '<li>$1</li>')
+            .replace(/\n{2,}/g, '<br>');
+          // Wrap consecutive <li> in <ul>
+          html = html.replace(/(<li>.*?<\/li>)+/gs, (m) => `<ul>${m}</ul>`);
+          // Render as HTML in chatbot
           const message = document.createElement('div');
           message.className = 'chatbot-message bot';
           const sender = document.createElement('span');
           sender.className = 'sender';
           sender.textContent = 'Umbra Agent';
           const copy = document.createElement('div');
-          copy.innerHTML = answerHtml; // assume backend sanitized
+          copy.innerHTML = html;
           message.append(sender, copy);
           chatbotMessages.append(message);
+          chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: "smooth" });
+          return;
         }
-
-        // render highlights
-        if (highlights && highlights.length) {
-          const block = document.createElement('div');
-          block.className = 'chatbot-highlights';
-          const ul = document.createElement('ul');
-          highlights.forEach((h) => {
-            const li = document.createElement('li');
-            li.textContent = h;
-            ul.appendChild(li);
-          });
-          block.appendChild(ul);
-          chatbotMessages.appendChild(block);
-        }
-
-        // render citations
-        if (citations && citations.length) {
-          const cBlock = document.createElement('div');
-          cBlock.className = 'chatbot-citations';
-          const title = document.createElement('div');
-          title.className = 'citations-title';
-          title.textContent = `${res.result.sourcesCount || citations.length} sources`;
-          cBlock.appendChild(title);
-          const list = document.createElement('ul');
-          citations.forEach((c) => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.textContent = c.title || c.url || c.id;
-            if (c.url) a.href = c.url;
-            a.target = '_blank';
-            li.appendChild(a);
-            if (c.fragment) {
-              const frag = document.createElement('p');
-              frag.textContent = c.fragment;
-              li.appendChild(frag);
-            }
-            list.appendChild(li);
-          });
-          cBlock.appendChild(list);
-          chatbotMessages.appendChild(cBlock);
-        }
-
-        // render actions as buttons
-        if (actions && actions.length) {
-          const actionBar = document.createElement('div');
-          actionBar.className = 'chatbot-actions';
-          actions.forEach((act) => {
-            const btn = document.createElement('button');
-            btn.className = 'btn secondary';
-            btn.textContent = act.label || 'Action';
-            btn.addEventListener('click', () => {
-              if (act.type === 'open_url' && act.payload && act.payload.url) {
-                window.open(act.payload.url, act.payload.openInNewTab ? '_blank' : '_self');
-              } else if (act.type === 'request_long_summary') {
-                // request a longer summary
-                chatbotForm.dispatchEvent(new CustomEvent('requestLongSummary', { detail: { minWords: act.payload && act.payload.minWords } }));
-              }
-            });
-            actionBar.appendChild(btn);
-          });
-          chatbotMessages.appendChild(actionBar);
-        }
+        // fallback: show error or generic message
+        appendChatbotMessage('bot', res && res.error && res.error.message ? `Error: ${res.error.message}` : 'Sorry, I could not get an answer right now.');
       } catch (err) {
         // remove thinking
         if (chatbotMessages) {
