@@ -181,9 +181,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const callDeepseek = async (query) => {
     const base = getApiBase();
     if (!base) throw new Error('API base URL not configured');
-
-  const url = `${base}/api/v1/deepseek/query`;
+    const url = `${base}/api/v1/deepseek/query`;
     const payload = { query, topK: 5 };
+    // debug: log the outgoing request so we can trace which path is being used
+    try {
+      console.debug('[Deepseek] POST', url, payload);
+    } catch (e) {
+      // ignore console failures in older browsers
+    }
 
     const resp = await fetch(url, {
       method: 'POST',
@@ -197,7 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!resp.ok) {
       const text = await resp.text();
-      throw new Error(`Deepseek API error: ${resp.status} ${text}`);
+      // include response.url in thrown error to help trace proxies/tunnels
+      const respUrl = resp.url || url;
+      const message = `Deepseek API error: ${resp.status} ${respUrl} ${text}`;
+      console.error('[Deepseek] API error', { status: resp.status, url: respUrl, body: text });
+      throw new Error(message);
     }
 
     const data = await resp.json();
