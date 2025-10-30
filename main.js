@@ -279,192 +279,26 @@ document.addEventListener("DOMContentLoaded", () => {
   setupHud();
 
   // Deferred content loader
-  const defaultContent = {
-    technology: [
-      {
-        tag: "Orchestrator",
-        title: "FastAPI Control Plane",
-        description: "Coordinates prompts, guardrails, and routing across every Umbra session with deterministic fallbacks.",
-        points: [
-          "Policy middleware enforces per-tenant governance in under 38 ms.",
-          "Blue/green rollouts maintained 99.99% uptime during nine pilot launches.",
-        ],
-        metrics: [
-          { label: "Latency", value: "<52 ms" },
-          { label: "Rollouts", value: "x128 pods" },
-        ],
-        tooltip: "Umbra's central brain dispatching every agent task.",
-        icon: "orchestrator",
-      },
-      {
-        tag: "Retrieval Core",
-        title: "Hybrid Vector Search",
-        description: "Dense embeddings pair with policy filters to surface vetted evidence for every answer.",
-        points: [
-          "Nova Labs recorded 97.6% recall across 6M documents in production.",
-          "Adaptive windows prevent hallucinations even on 48k token transcripts.",
-        ],
-        metrics: [
-          { label: "Recall", value: "97.6%" },
-          { label: "Context", value: "48k tokens" },
-        ],
-        tooltip: "Surfaces the right evidence for every answer.",
-        icon: "retrieval",
-      },
-      {
-        tag: "Realtime IO",
-        title: "SSE Delivery Gateway",
-        description: "Streams interim answers, citations, and agent actions as they are produced.",
-        points: [
-          "Median p95 latency held at 74 ms during launch week spikes.",
-          "Edge POP fan-out kept 25k+ concurrent conversations in sync.",
-        ],
-        metrics: [
-          { label: "Uptime", value: "99.98%" },
-          { label: "Fan-out", value: "25k streams" },
-        ],
-        tooltip: "Ensures teams see Umbra's reasoning live.",
-        icon: "realtime",
-      },
-      {
-        tag: "Trust Layer",
-        title: "Umbra Shield Policies",
-        description: "Compliance, redaction, and human-in-the-loop review fire automatically when signals demand.",
-        points: [
-          "Meridian Health blocked 100% of PII slips across 42k conversations.",
-          "Escalation hooks notified SMEs within a 1.4 s SLA.",
-        ],
-        metrics: [
-          { label: "Coverage", value: "11 locales" },
-          { label: "Alerts", value: "<1.4 s" },
-        ],
-        tooltip: "Keeps guidance compliant without slowing teams down.",
-        icon: "trust",
-      },
-      {
-        tag: "Observability",
-        title: "Telemetry Mesh",
-        description: "Live traces and metrics show how each agent decision unfolded end-to-end.",
-        points: [
-          "3B structured signals/day feed Umbra Mission Control dashboards.",
-          "Drift monitors surfaced anomalies 28 minutes before operators did.",
-        ],
-        metrics: [
-          { label: "Signals", value: "3B / day" },
-          { label: "Retention", value: "35 days" },
-        ],
-        tooltip: "Streams telemetry into a unified operational dashboard.",
-        icon: "observability",
-      },
-      {
-        tag: "Human Loop",
-        title: "Operator Console",
-        description: "Supervisors review, approve, or escalate responses in real-time with full audit context.",
-        points: [
-          "Role-based controls synced with existing SSO providers in under two hours.",
-          "Hand-off packets preserved 100% of citation trails across shifts.",
-        ],
-        metrics: [
-          { label: "Escalations", value: "<90 s" },
-          { label: "Coverage", value: "24 / 7" },
-        ],
-        tooltip: "Keeps humans in the loop for high-sensitivity workflows.",
-        icon: "humanloop",
-      },
-    ],
-    testimonials: [
-      {
-        lane: "top",
-        company: "Nova Labs",
-        role: "Head of Intelligence",
-        metric: "62% faster escalations",
-        accent: "#ff3b30",
-        quote:
-          "“Umbra trimmed diligence sprints from 17 hours to 6.5. Our ops teams receive live, cited guidance before leadership even convenes.”",
-      },
-      {
-        lane: "top",
-        company: "Orbis AI",
-        role: "Delivery Director",
-        metric: "4.2x faster briefs",
-        accent: "#c91d1d",
-        quote:
-          "“Citation locking means every AI-assisted answer ships with the source of truth. We reduced rework hours by eighty percent.”",
-      },
-      {
-        lane: "top",
-        company: "Lumen Partners",
-        role: "Operations Executive",
-        metric: "38% fewer follow-ups",
-        accent: "#ff5345",
-        quote:
-          "“With Umbra memory we recap decisions instantly. Time-zone handoffs dropped from five emails to a single cited packet.”",
-      },
-      {
-        lane: "bottom",
-        company: "Polaris Ventures",
-        role: "Portfolio Operating Partner",
-        metric: "3.4 days saved",
-        accent: "#a31818",
-        quote:
-          "“The agent pre-screens thousands of pages so diligence meetings start with answers. Our average deal cycle shrank by three days.”",
-      },
-      {
-        lane: "bottom",
-        company: "Meridian Health",
-        role: "Chief Clinical Officer",
-        metric: "99.2% audit pass",
-        accent: "#ff3b30",
-        quote:
-          "“Compliance-ready answers with live citations meant every care protocol update cleared regulators on the first submission.”",
-      },
-      {
-        lane: "bottom",
-        company: "Atlas Robotics",
-        role: "Global Support Lead",
-        metric: "47% fewer truck rolls",
-        accent: "#8d1010",
-        quote:
-          "“Field engineers receive Umbra telemetry playbooks in under 75 ms. We avoid nearly half of our on-site dispatches now.”",
-      },
-    ],
-  };
-
   const contentState = {
     data: null,
     promise: null,
     rendered: {},
   };
 
-  const cloneDefault = () => JSON.parse(JSON.stringify(defaultContent));
-
-  const resolveWithDefault = () => {
-    if (!contentState.data) {
-      contentState.data = cloneDefault();
-    }
-    return contentState.data;
-  };
-
   const fetchContent = () => {
     if (contentState.promise) return contentState.promise;
-
-    if (window.location.protocol === "file:") {
-      contentState.promise = Promise.resolve(resolveWithDefault());
-      return contentState.promise;
-    }
-
     contentState.promise = fetch("content.json", { cache: "force-cache" })
       .then((response) => {
         if (!response.ok) throw new Error(`Failed to load content.json (${response.status})`);
         return response.json();
       })
       .then((json) => {
-        contentState.data = { ...cloneDefault(), ...json };
-        return contentState.data;
+        contentState.data = json;
+        return json;
       })
       .catch((error) => {
         console.error(error);
-        return resolveWithDefault();
+        return null;
       });
     return contentState.promise;
   };
@@ -528,17 +362,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const initHeroPointsCarousel = () => {
     const track = document.querySelector(".hero-points");
-    if (!track) return;
-    const baseItems = Array.from(track.children);
-    if (baseItems.length < 2) return;
+    if (!track || track.dataset.marqueeInitialized === "true") return;
+    const items = Array.from(track.children);
+    if (items.length < 2) return;
 
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const mobileQuery = window.matchMedia("(max-width: 720px)");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      track.style.animation = "none";
+      track.style.removeProperty("--hero-points-loop");
+      track.style.removeProperty("--hero-points-duration");
+      return;
+    }
+
+    items.forEach((item) => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    });
+
+    track.dataset.marqueeInitialized = "true";
     const SPEED_PX_PER_SECOND = 72;
-    let resizeObserver;
-
     const updateLoop = () => {
-      if (track.dataset.marqueeInitialized !== "true") return;
       const loopDistance = track.scrollWidth / 2;
       if (!loopDistance) return;
       track.style.setProperty("--hero-points-loop", `${loopDistance}px`);
@@ -547,61 +391,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const scheduleUpdate = () => requestAnimationFrame(updateLoop);
-
-    const teardownMarquee = () => {
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-        resizeObserver = null;
-      }
-      if (track.dataset.marqueeInitialized === "true") {
-        Array.from(track.querySelectorAll("[aria-hidden=\"true\"]")).forEach((clone) => clone.remove());
-        track.removeAttribute("data-marquee-initialized");
-      }
-      track.style.removeProperty("animation");
-      track.style.removeProperty("--hero-points-loop");
-      track.style.removeProperty("--hero-points-duration");
-    };
-
-    const setupMarquee = () => {
-      if (track.dataset.marqueeInitialized === "true") {
-        scheduleUpdate();
-        return;
-      }
-      track.style.removeProperty("animation");
-      baseItems.forEach((item) => {
-        const clone = item.cloneNode(true);
-        clone.setAttribute("aria-hidden", "true");
-        track.appendChild(clone);
-      });
-      track.dataset.marqueeInitialized = "true";
-      scheduleUpdate();
-      if ("ResizeObserver" in window) {
-        resizeObserver = new ResizeObserver(scheduleUpdate);
-        resizeObserver.observe(track);
-      }
-    };
-
-    const applyMode = () => {
-      if (motionQuery.matches || mobileQuery.matches) {
-        teardownMarquee();
-        return;
-      }
-      setupMarquee();
-    };
-
-    applyMode();
-    window.addEventListener("resize", applyMode);
+    scheduleUpdate();
+    window.addEventListener("resize", scheduleUpdate);
     window.addEventListener("load", scheduleUpdate, { once: true });
-    const registerMediaListener = (query) => {
-      if (!query) return;
-      if (typeof query.addEventListener === "function") {
-        query.addEventListener("change", applyMode);
-      } else if (typeof query.addListener === "function") {
-        query.addListener(applyMode);
-      }
-    };
-    registerMediaListener(motionQuery);
-    registerMediaListener(mobileQuery);
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver(scheduleUpdate);
+      observer.observe(track);
+    }
   };
 
   const populateTechnology = (items = []) => {
